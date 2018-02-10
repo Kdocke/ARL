@@ -1,0 +1,85 @@
+//打鱼还是晒网
+/*
+问题描述：
+		 中国有句俗语叫"三天打鱼两天晒网"。某人从1990年1月1日起开始"三天打鱼两天晒网" ，
+	问这个人在以后的某一天中是"打鱼"还是"晒网"？
+*/
+
+/**
+ * 分析：
+ * 		根据题意可将解题过程分为3步：
+ * 		(1)计算从1990年1月1日开始到指定日期共多少天
+ * 		(2)由于"打鱼"和"晒网"的周期为5天，所以将计算的天数去除以5
+ * 		(3)根据余数判断他是在"打鱼"还是在"晒网",若余数为1,2,3则他在打鱼，否则在晒网 
+ * @author Kdocke
+ * @version v1.0
+ */
+#include<stdio.h>
+/*定义日期结构体*/
+typedef struct date {
+	int year;
+	int month;
+	int day;
+}DATE; 
+int countDay(DATE); 	//函数声明 
+int runYear(int); 	//函数声明
+int main()
+{
+	DATE today;		//指定日期 
+	int totalDay;		//指定日期距离1990年1月1日的总天数 
+	int result;		//totalDay对5取余的结果
+	
+	/*输入指定日期，包括年，月，日*/
+	printf("请输入指定日期，包括年，月，日 如：1999 1 31\n");
+	scanf("%d%d%d",&today.year,&today.month,&today.day);
+	
+	/*求出指定日期距离1990年1月1日的总天数*/ 
+	totalDay = countDay(today);
+	
+	/*天数%5,判断输出打鱼还是晒网*/
+	result = totalDay%5;
+	if(result>=1 && result<=3)
+		printf("今天打鱼");
+	else
+		printf("今天晒网"); 
+ } 
+ 
+/*判断是否为闰年，是返回1，否返回0*/
+int runYear(int year)
+{
+	if(year%4==0 && year%100!=0 || year%400==0) //是闰年
+		return 1;
+	else
+		return 0; 
+ } 
+ 
+/*计算指定日期到1990年1月1日的天数*/
+int countDay(DATE currentDay)
+{
+	int perMonth[13] = {0,31,28,31,30,31,30,31,31,30,31,30,31};		//每月天数数组
+	
+	int totalDay=0,year,i;
+	
+	/*求出指定日期之前的每一年的天数的累加*/
+	for(year=1990;year<currentDay.year;year++)
+	{
+		if(runYear(year))
+			totalDay += 366;
+		else
+			totalDay += 365;
+	 } 
+	 
+	/*如果为闰年，则2月份有29天*/
+	if(runYear(currentDay.year))
+		perMonth[2] = 29;
+		
+	/*将本年内的天数累加到totalDay中*/ 
+	for(i=0;i<currentDay.month;i++)
+		totalDay += perMonth[i];
+	
+	/*将本月内的天数累加到totalDay中*/
+	totalDay += currentDay.day;
+	
+	/*返回总天数*/
+	return totalDay; 
+}
