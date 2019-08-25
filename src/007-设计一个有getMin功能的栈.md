@@ -30,6 +30,7 @@ public class GetMinStack {
         if (this.stackData.isEmpty()){
             throw new RuntimeException("Your stack is empty!");
         }
+        
         int value = this.stackData.pop();
         if (value == this.getMin()){
             this.stackMin.pop();
@@ -91,6 +92,7 @@ public class GetMinStack {
         if (this.stackData.isEmpty()){
             throw new RuntimeException("Your stack is empty!");
         }
+        
         this.stackMin.pop();
         return this.stackData.pop();
     }
